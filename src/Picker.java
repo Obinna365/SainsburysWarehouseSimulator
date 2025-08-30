@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class Picker {
     public static void main(String[] args) {
-        try (Socket socket = new Socket("localhost", 55641);
+        try (Socket socket = new Socket("localhost", 12345);
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
              PrintWriter out = new PrintWriter(socket.getOutputStream(), true); // Auto-flush enabled
              BufferedReader userInput = new BufferedReader(new InputStreamReader(System.in))) {
