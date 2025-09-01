@@ -60,5 +60,22 @@ public class ClientHandler implements Runnable{
         return food;
 
     }
+
+    List<HashMap<String,Integer>> palletsInWarehouse = generatePallets();
+    public HashMap<String,Integer> pickPallet(int index){
+        HashMap<String, Integer> singlepallet = new HashMap<>();
+        System.out.println("Pick a Pallet");
+        for (int num = 0; num < palletsInWarehouse.size(); num++) {
+            System.out.println(num + " : " + palletsInWarehouse.get(num));
+        }
+        if(index >= palletsInWarehouse.size()){
+            System.out.println("Pallet invalid");
+            return null;
+        }
+        singlepallet.putAll(palletsInWarehouse.get(index));
+        palletsInWarehouse.remove(index);
+
+        return singlepallet;
+    }
 }
 
