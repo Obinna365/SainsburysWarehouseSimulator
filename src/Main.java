@@ -13,7 +13,7 @@ public class Main {
         try (ServerSocket serverSocket = new ServerSocket(Port)) {
             while (true){
             Socket clientSocket = serverSocket.accept();
-            System.out.println("New Picker Connected");
+            System.out.println("Picker Connected");
             ClientHandler clientHandler = new ClientHandler(clientSocket);
             threadPool.submit(clientHandler);}
         } catch (IOException e) {
