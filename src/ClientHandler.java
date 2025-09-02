@@ -19,11 +19,24 @@ public class ClientHandler implements Runnable{
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
             outerlabel:
             for(;;) {
-                String input = in.readLine();
                 out.println("Enter Payroll Number:");
-                while (input != null){
-                    System.out.println("Picker says: " + in);
+                String input = in.readLine();
+                int payrollnumber = Integer.parseInt(input);
+                if (input.matches("\\d{6}")) {
+                    out.println("Payroll number accepted.");
+                    System.out.println(payrollnumber + " Has Logged in");
+                } else {
+                    out.println("Invalid payroll number. Try again.");
                 }
+
+                System.out.println(payrollnumber + " Is available to pick");
+                out.println("Please choose a pallet to pick");
+                displayAllPalletes(out);
+                int Pallet = Integer.parseInt(in.readLine());
+                out.println(pickPallet(Pallet,out, payrollnumber));
+                out.println("Go to either Grid 1, Grid 2, or Grid 3");
+
+
                 break outerlabel;
             }
             } catch (IOException e) {
@@ -60,22 +73,30 @@ public class ClientHandler implements Runnable{
         return food;
 
     }
-
     List<HashMap<String,Integer>> palletsInWarehouse = generatePallets();
-    public HashMap<String,Integer> pickPallet(int index){
-        HashMap<String, Integer> singlepallet = new HashMap<>();
-        System.out.println("Pick a Pallet");
+    private void displayAllPalletes(PrintWriter out){
         for (int num = 0; num < palletsInWarehouse.size(); num++) {
-            System.out.println(num + " : " + palletsInWarehouse.get(num));
+            out.println(num + " : " + palletsInWarehouse.get(num));
         }
+    }
+
+    private HashMap<String,Integer> pickPallet(int index, PrintWriter out, int payrollnumber){
+        HashMap<String, Integer> singlepallet = new HashMap<>();
+
         if(index >= palletsInWarehouse.size()){
-            System.out.println("Pallet invalid");
+           out.println("Pallet invalid");
             return null;
         }
         singlepallet.putAll(palletsInWarehouse.get(index));
         palletsInWarehouse.remove(index);
+        System.out.println(payrollnumber + " Has chosen a pallet " + singlepallet);
+        System.out.println("There are " + palletsInWarehouse.size() + " pallets left");
 
         return singlepallet;
     }
+
+
+
+
 }
 
