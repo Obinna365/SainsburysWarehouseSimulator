@@ -45,7 +45,7 @@ public class ClientHandler implements Runnable{
 
 
     }
-    private List<HashMap<String, Integer>> generatePallets(){
+    private static List<HashMap<String, Integer>> generatePallets(){
         ArrayList<String> Goods = GenerateGoodsIn();
         List<HashMap<String, Integer>> pallet = new ArrayList<>();
         for (int i = 0; i < 20; i++){
@@ -59,7 +59,7 @@ public class ClientHandler implements Runnable{
 
     }
 
-    private ArrayList<String> GenerateGoodsIn(){
+    private static ArrayList<String> GenerateGoodsIn(){
         ArrayList<String> food = new ArrayList<>();
         food.add("Yogurt");
         food.add("Bread");
@@ -73,7 +73,7 @@ public class ClientHandler implements Runnable{
         return food;
 
     }
-    List<HashMap<String,Integer>> palletsInWarehouse = generatePallets();
+    private static List<HashMap<String,Integer>> palletsInWarehouse = Collections.synchronizedList(generatePallets());
     private void displayAllPalletes(PrintWriter out){
         for (int num = 0; num < palletsInWarehouse.size(); num++) {
             out.println(num + " : " + palletsInWarehouse.get(num));
