@@ -33,9 +33,9 @@ public class ClientHandler implements Runnable{
                 out.println("Please choose a pallet to pick");
                 displayAllPalletes(out);
                 int Pallet = Integer.parseInt(in.readLine());
-                out.println(pickPallet(Pallet,out, payrollnumber));
-                out.println("Go to either Grid 1, Grid 2, or Grid 3");
-
+                HashMap <String, Integer> UsersPallet = pickPallet(Pallet,out, payrollnumber);
+                out.println(UsersPallet);
+               sortGrid(UsersPallet, out);
 
                 break outerlabel;
             }
@@ -94,9 +94,25 @@ public class ClientHandler implements Runnable{
 
         return singlepallet;
     }
+    private void sortGrid(HashMap<String, Integer> singlepallet, PrintWriter out){
+        String nameofproduct = singlepallet.toString();
+        String lowercaseproduct =  nameofproduct.toLowerCase();
+        if (lowercaseproduct.contains("ready meal")){
+            out.println("Go to grid 2");
+        }
+        if (lowercaseproduct.contains("yogurt")){
+            out.println("Go to grid 1");
+        }
+        if (lowercaseproduct.contains("bread")||lowercaseproduct.contains("bagels")||lowercaseproduct.contains("vienese biscuits")||lowercaseproduct.contains("cranberry pie")){
+            out.println("Go to grid 3");
+
+        } else if (lowercaseproduct.equals(null)) {
+            out.println("Pallet is not working");
+
+        }
+    }
+
+    }
 
 
-
-
-}
 
