@@ -99,9 +99,11 @@ public class ClientHandler implements Runnable{
         String lowercaseproduct =  nameofproduct.toLowerCase();
         if (lowercaseproduct.contains("ready meal")){
             out.println("Go to grid 2");
+            insideGrid1(singlepallet, out);
         }
         if (lowercaseproduct.contains("yogurt")){
             out.println("Go to grid 1");
+            insideGrid1(singlepallet, out);
         }
         if (lowercaseproduct.contains("bread")||lowercaseproduct.contains("bagels")||lowercaseproduct.contains("vienese biscuits")||lowercaseproduct.contains("cranberry pie")){
             out.println("Go to grid 3");
@@ -110,6 +112,14 @@ public class ClientHandler implements Runnable{
             out.println("Pallet is not working");
 
         }
+    }
+    private void insideGrid1(HashMap<String, Integer> pallet,PrintWriter out){
+        String nameofpallet = pallet.keySet().iterator().next();
+        int numofproducts = pallet.values().iterator().next();
+        Queue<Integer> pallet1 = new LinkedList<>();
+        pallet1.add(numofproducts);
+
+
     }
 
     }

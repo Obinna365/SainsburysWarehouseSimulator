@@ -1,7 +1,5 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.io.PrintWriter;
+import java.util.*;
 
 public class Practice {
     public List<HashMap<String, Integer>> generatePallets(){
@@ -68,6 +66,14 @@ public class Practice {
             System.out.println("Pallet is not working");
 
         }
+    }
+    private void insideGrid1(HashMap<String, Integer> pallet){
+        String nameofpallet = pallet.keySet().iterator().next();
+        int numofproducts = pallet.values().iterator().next();
+        Queue<Integer> pallet1 = new LinkedList<>();
+        pallet1.add(numofproducts);
+
+
     }
 
 
