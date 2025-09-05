@@ -112,12 +112,6 @@ public class ClientHandler implements Runnable{
 
 
     }
-    /*private Queue turnHashMaptoQueue(HashMap<String, Integer> pallet){
-        String nameofpallet = pallet.keySet().iterator().next();
-        int numofproducts = pallet.values().iterator().next();
-        Queue<Integer> pallet1 = new LinkedList<>();
-        pallet1.add(numofproducts);
-        return pallet1;}*/
 
 
     private static final List<ArrayList<int[]>> warehousecages = cagesInWarehouse();
@@ -133,11 +127,66 @@ public class ClientHandler implements Runnable{
             }}
         return cagesinwarehouse;
     }
+    public ArrayList<Integer> chooseStores(){
+        ArrayList <Integer> listofstores = new ArrayList<>();
+        ArrayList <Integer> usednumbers = new ArrayList<>();
+        ArrayList <Integer> usednumbers4queue = new ArrayList<>();
+        ArrayList <Integer> numofproductperstore = new ArrayList<>();
+
+        int count = (int) (Math.random()* 84) + 1;
+        for (int i = 0; i < count; i ++){
+            int stores = (int) (Math.random()*84) + 1;
+            if (!usednumbers.contains(stores)){
+                listofstores.add(stores);
+                usednumbers.add(stores);}
+        }
+        Collections.sort(listofstores);
+        return listofstores;
+
+    }
+    public LinkedHashMap<Integer, Integer> distributeProducts(LinkedHashMap<String,Integer> pallet) {
+        int totalProducts = pallet.values().iterator().next();
+        ArrayList<Integer> stores = chooseStores();
+        LinkedHashMap<Integer, Integer> distribution = new LinkedHashMap<>();
+
+        Random rand = new Random();
+
+        // Start with total products left
+        int remaining = totalProducts;
+
+        for (int i = 0; i < stores.size(); i++) {
+            int store = stores.get(i);
+
+            // If last store → give it all leftovers
+            if (i == stores.size() - 1) {
+                distribution.put(store, remaining);
+            } else {
+                // Random split between 1 and remaining
+                int amount = rand.nextInt(remaining - (stores.size() - i - 1)) + 1;
+                distribution.put(store, amount);
+                remaining -= amount;
+            }
+        }
+
+        return distribution;
+    }
+    private Queue turnHashMaptoQueue(LinkedHashMap<String, Integer> pallet){
+        Queue<Integer> pallet1 = new LinkedList<>();
+        //String nameofpallet = pallet.keySet().iterator().next();
+        //int numofproducts = pallet.values().iterator().next();
+        for (int numofproducts : pallet.values()){
+            pallet1.add(numofproducts);}
+
+        return pallet1;
+    }
+
 
 
     public void Picking (PrintWriter out,LinkedHashMap<String, Integer> pallet){
        int gridassigner = sortGrid(pallet,out);
         ArrayList<int[]> chosengrid = warehousecages.get(gridassigner);
+        LinkedHashMap<Integer, Integer> distributedprodocts = distributeProducts(pallet);
+        Queue queue = turnHashMaptoQueue(pallet);
     }
 
     }
