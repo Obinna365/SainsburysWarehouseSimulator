@@ -33,9 +33,9 @@ public class ClientHandler implements Runnable{
                 out.println("Please choose a pallet to pick");
                 displayAllPalletes(out);
                 int Pallet = Integer.parseInt(in.readLine());
-                HashMap <String, Integer> UsersPallet = pickPallet(Pallet,out, payrollnumber);
+                LinkedHashMap <String, Integer> UsersPallet = pickPallet(Pallet,out, payrollnumber);
                 out.println(UsersPallet);
-               sortGrid(UsersPallet, out);
+                Picking(out, UsersPallet);
 
                 break outerlabel;
             }
@@ -45,13 +45,13 @@ public class ClientHandler implements Runnable{
 
 
     }
-    private static List<HashMap<String, Integer>> generatePallets(){
+    private static List<LinkedHashMap<String, Integer>> generatePallets(){
         ArrayList<String> Goods = GenerateGoodsIn();
-        List<HashMap<String, Integer>> pallet = new ArrayList<>();
+        List<LinkedHashMap<String, Integer>> pallet = new ArrayList<>();
         for (int i = 0; i < 20; i++){
             int amount = (int)(Math.random() * 150) + 1;
             String item = Goods.get(new Random().nextInt(Goods.size()));
-            HashMap<String, Integer> Product = new HashMap<>();
+            LinkedHashMap<String, Integer> Product = new LinkedHashMap<>();
             Product.put(item,amount);
             pallet.add(Product);
         }
@@ -73,15 +73,15 @@ public class ClientHandler implements Runnable{
         return food;
 
     }
-    private static List<HashMap<String,Integer>> palletsInWarehouse = Collections.synchronizedList(generatePallets());
+    private static List<LinkedHashMap<String,Integer>> palletsInWarehouse = Collections.synchronizedList(generatePallets());
     private void displayAllPalletes(PrintWriter out){
         for (int num = 0; num < palletsInWarehouse.size(); num++) {
             out.println(num + " : " + palletsInWarehouse.get(num));
         }
     }
 
-    private HashMap<String,Integer> pickPallet(int index, PrintWriter out, int payrollnumber){
-        HashMap<String, Integer> singlepallet = new HashMap<>();
+    private LinkedHashMap<String,Integer> pickPallet(int index, PrintWriter out, int payrollnumber){
+        LinkedHashMap<String, Integer> singlepallet = new LinkedHashMap<>();
 
         if(index >= palletsInWarehouse.size()){
            out.println("Pallet invalid");
@@ -94,32 +94,32 @@ public class ClientHandler implements Runnable{
 
         return singlepallet;
     }
-    private void sortGrid(HashMap<String, Integer> singlepallet, PrintWriter out){
+    private int sortGrid(LinkedHashMap<String, Integer> singlepallet, PrintWriter out){
         String nameofproduct = singlepallet.toString();
         String lowercaseproduct =  nameofproduct.toLowerCase();
         if (lowercaseproduct.contains("ready meal")){
             out.println("Go to grid 2");
+            return 1;
         }
         if (lowercaseproduct.contains("yogurt")){
             out.println("Go to grid 1");
+            return 0;
         }
         if (lowercaseproduct.contains("bread")||lowercaseproduct.contains("bagels")||lowercaseproduct.contains("vienese biscuits")||lowercaseproduct.contains("cranberry pie")){
             out.println("Go to grid 3");
+        return 2;}
+        return -1;
 
-        } else if (lowercaseproduct.equals(null)) {
-            out.println("Pallet is not working");
 
-        }
     }
-    private Queue turnHashMaptoQueue(HashMap<String, Integer> pallet){
+    /*private Queue turnHashMaptoQueue(HashMap<String, Integer> pallet){
         String nameofpallet = pallet.keySet().iterator().next();
         int numofproducts = pallet.values().iterator().next();
         Queue<Integer> pallet1 = new LinkedList<>();
         pallet1.add(numofproducts);
-        return pallet1;
+        return pallet1;}*/
 
 
-    }
     private static final List<ArrayList<int[]>> warehousecages = cagesInWarehouse();
     private static List<ArrayList<int[]>> cagesInWarehouse(){
         List<ArrayList<int[]>> cagesinwarehouse = new ArrayList<>();
@@ -133,6 +133,13 @@ public class ClientHandler implements Runnable{
             }}
         return cagesinwarehouse;
     }
+
+
+    public void Picking (PrintWriter out,LinkedHashMap<String, Integer> pallet){
+       int gridassigner = sortGrid(pallet,out);
+        ArrayList<int[]> chosengrid = warehousecages.get(gridassigner);
+    }
+
     }
 
 

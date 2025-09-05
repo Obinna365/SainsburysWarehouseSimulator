@@ -67,6 +67,52 @@ public class Practice {
 
         }
     }
+    public ArrayList<Integer> chooseStores(){
+        ArrayList <Integer> listofstores = new ArrayList<>();
+        ArrayList <Integer> usednumbers = new ArrayList<>();
+        ArrayList <Integer> usednumbers4queue = new ArrayList<>();
+        ArrayList <Integer> numofproductperstore = new ArrayList<>();
+
+        int count = (int) (Math.random()* 84) + 1;
+        for (int i = 0; i < count; i ++){
+            int stores = (int) (Math.random()*84) + 1;
+            if (!usednumbers.contains(stores)){
+                listofstores.add(stores);
+                usednumbers.add(stores);}
+            }
+            Collections.sort(listofstores);
+        return listofstores;
+
+        }
+    public HashMap<Integer, Integer> distributeProducts(HashMap<String,Integer> pallet) {
+        int totalProducts = pallet.values().iterator().next();
+        ArrayList<Integer> stores = chooseStores();
+        LinkedHashMap<Integer, Integer> distribution = new LinkedHashMap<>();
+
+        Random rand = new Random();
+
+        // Start with total products left
+        int remaining = totalProducts;
+
+        for (int i = 0; i < stores.size(); i++) {
+            int store = stores.get(i);
+
+            // If last store → give it all leftovers
+            if (i == stores.size() - 1) {
+                distribution.put(store, remaining);
+            } else {
+                // Random split between 1 and remaining
+                int amount = rand.nextInt(remaining - (stores.size() - i - 1)) + 1;
+                distribution.put(store, amount);
+                remaining -= amount;
+            }
+        }
+
+        return distribution;
+    }
+
+
+
     private void insideGrid1(HashMap<String, Integer> pallet){
         String nameofpallet = pallet.keySet().iterator().next();
         int numofproducts = pallet.values().iterator().next();
@@ -76,12 +122,19 @@ public class Practice {
 
     }
 
+    public void picking(){
+
+    }
+
 
     public static void main(String[] args) {
         HashMap<String, Integer> Product = new HashMap<String, Integer>();
         Product.put("Ready Meal: Toad in the hole", 10);
         Practice main = new Practice();
+        //main.chooseStores();
         //System.out.println(main.generatePallets());
+        HashMap<String,Integer> UserPallet = main.pickPallet(8);
         //System.out.println(main.pickPallet(8));
-        main.sortGrid(Product);
+        System.out.println(main.distributeProducts(UserPallet));
+        //main.sortGrid(Product);
 }}
