@@ -99,11 +99,9 @@ public class ClientHandler implements Runnable{
         String lowercaseproduct =  nameofproduct.toLowerCase();
         if (lowercaseproduct.contains("ready meal")){
             out.println("Go to grid 2");
-            insideGrid1(singlepallet, out);
         }
         if (lowercaseproduct.contains("yogurt")){
             out.println("Go to grid 1");
-            insideGrid1(singlepallet, out);
         }
         if (lowercaseproduct.contains("bread")||lowercaseproduct.contains("bagels")||lowercaseproduct.contains("vienese biscuits")||lowercaseproduct.contains("cranberry pie")){
             out.println("Go to grid 3");
@@ -113,15 +111,28 @@ public class ClientHandler implements Runnable{
 
         }
     }
-    private void insideGrid1(HashMap<String, Integer> pallet,PrintWriter out){
+    private Queue turnHashMaptoQueue(HashMap<String, Integer> pallet){
         String nameofpallet = pallet.keySet().iterator().next();
         int numofproducts = pallet.values().iterator().next();
         Queue<Integer> pallet1 = new LinkedList<>();
         pallet1.add(numofproducts);
+        return pallet1;
 
 
     }
+    private static final List<ArrayList<int[]>> warehousecages = cagesInWarehouse();
+    private static List<ArrayList<int[]>> cagesInWarehouse(){
+        List<ArrayList<int[]>> cagesinwarehouse = new ArrayList<>();
+        for (int grids = 0; grids < 3; grids++){
+            ArrayList<int[]> cages = new ArrayList<>();
+            cagesinwarehouse.add(cages);
+            for (int i = 0; i < 84; i++){
+            int[] cage = new int[50];
+            cages.add(cage);
 
+            }}
+        return cagesinwarehouse;
+    }
     }
 
 
