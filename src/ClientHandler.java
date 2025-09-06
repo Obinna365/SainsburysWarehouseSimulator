@@ -40,7 +40,7 @@ public class ClientHandler implements Runnable{
                 ArrayList<int[]> chosengrid = warehousecages.get(gridassigner);
                 out.println("Grid Assigned: " + gridassigner);
                 distributeProducts(UsersPallet,out);
-                picking(out,in,chosengrid,distributeProducts(UsersPallet,out));}
+                picking(out,in,chosengrid,distributeProducts(UsersPallet,out), payrollnumber);}
                 if(palletsInWarehouse.isEmpty()){
                     System.out.println("All Goods have Gone");
                     out.println("Well Done all the goods have gone!");
@@ -139,8 +139,6 @@ public class ClientHandler implements Runnable{
     public ArrayList<Integer> chooseStores(){
         ArrayList <Integer> listofstores = new ArrayList<>();
         ArrayList <Integer> usednumbers = new ArrayList<>();
-        ArrayList <Integer> usednumbers4queue = new ArrayList<>();
-        ArrayList <Integer> numofproductperstore = new ArrayList<>();
 
         int count = (int) (Math.random()* 84) + 1;
         for (int i = 0; i < count; i ++){
@@ -194,16 +192,18 @@ public class ClientHandler implements Runnable{
 
         return pallet1;
     }*/
-    private void picking(PrintWriter out, BufferedReader in,  ArrayList<int[]> chosengrid, LinkedHashMap<Integer, Integer> distribution) throws IOException {
+    private void picking(PrintWriter out, BufferedReader in,  ArrayList<int[]> chosengrid, LinkedHashMap<Integer, Integer> distribution, int payrollnumber) throws IOException {
+        int totalLeft = 0;
+        for (int units : distribution.values()) {
+            totalLeft += units;
+        }
         for (Map.Entry<Integer, Integer> entry : distribution.entrySet()) {
             int storeNumber = entry.getKey();
             int remaining = entry.getValue();
             int cageIndex = storeNumber - 1; // starting cage for the store
 
-            int totalLeft = 0;
-            for (int units : distribution.values()) {
-                totalLeft += units;
-            }
+
+
             while (remaining > 0) {
                 int[] cage = chosengrid.get(cageIndex);
 
@@ -257,7 +257,9 @@ public class ClientHandler implements Runnable{
                 }
 
                 remaining -= picked;
-                out.println("Picked " + picked + " units for cage " + (cageIndex + 1) + ", remaining " + remaining);
+                totalLeft -= picked;
+                out.println("Picked " + picked + " units for cage " + (cageIndex + 1) + ", remaining " + totalLeft);
+                System.out.println(payrollnumber + " Picked " + picked + " units for cage " + (cageIndex + 1));
             }
 
 
