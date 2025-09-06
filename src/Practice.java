@@ -2,13 +2,13 @@ import java.io.PrintWriter;
 import java.util.*;
 
 public class Practice {
-    public List<HashMap<String, Integer>> generatePallets(){
+    public List<LinkedHashMap<String, Integer>> generatePallets(){
         ArrayList<String> Goods = GenerateGoodsIn();
-        List<HashMap<String, Integer>> pallet = new ArrayList<>();
+        List<LinkedHashMap<String, Integer>> pallet = new ArrayList<>();
         for (int i = 0; i < 20; i++){
             int amount = (int)(Math.random() * 150) + 1;
             String item = Goods.get(new Random().nextInt(Goods.size()));
-            HashMap<String, Integer> Product = new HashMap<>();
+            LinkedHashMap<String, Integer> Product = new LinkedHashMap<>();
             Product.put(item,amount);
             pallet.add(Product);
         }
@@ -30,13 +30,10 @@ public class Practice {
 
 
     }
-    List<HashMap<String,Integer>> palletsInWarehouse = generatePallets();
-    public HashMap<String,Integer> pickPallet(int index){
-        HashMap<String, Integer> singlepallet = new HashMap<>();
+    List<LinkedHashMap<String,Integer>> palletsInWarehouse = generatePallets();
+    public LinkedHashMap<String,Integer> pickPallet(int index){
+        LinkedHashMap<String, Integer> singlepallet = new LinkedHashMap<>();
         System.out.println("Pick a Pallet");
-        for (int num = 0; num < palletsInWarehouse.size(); num++) {
-            System.out.println(num + " : " + palletsInWarehouse.get(num));
-        }
         if(index >= palletsInWarehouse.size()){
             System.out.println("Pallet invalid");
             return null;
@@ -45,6 +42,11 @@ public class Practice {
         palletsInWarehouse.remove(index);
 
         return singlepallet;
+    }
+    private void displayAllPalletes(){
+        for (int num = 0; num < palletsInWarehouse.size(); num++) {
+            System.out.println(num + " : " + palletsInWarehouse.get(num));
+        }
     }
 
 
@@ -84,7 +86,7 @@ public class Practice {
         return listofstores;
 
         }
-    public HashMap<Integer, Integer> distributeProducts(HashMap<String,Integer> pallet) {
+    public LinkedHashMap<Integer, Integer> distributeProducts(LinkedHashMap<String,Integer> pallet) {
         int totalProducts = pallet.values().iterator().next();
         ArrayList<Integer> stores = chooseStores();
         LinkedHashMap<Integer, Integer> distribution = new LinkedHashMap<>();
@@ -122,9 +124,7 @@ public class Practice {
 
     }
 
-    public void picking(){
 
-    }
 
 
     public static void main(String[] args) {
@@ -133,7 +133,8 @@ public class Practice {
         Practice main = new Practice();
         //main.chooseStores();
         //System.out.println(main.generatePallets());
-        HashMap<String,Integer> UserPallet = main.pickPallet(8);
+        main.displayAllPalletes();
+        LinkedHashMap<String,Integer> UserPallet = main.pickPallet(8);
         //System.out.println(main.pickPallet(8));
         System.out.println(main.distributeProducts(UserPallet));
         //main.sortGrid(Product);
