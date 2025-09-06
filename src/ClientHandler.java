@@ -21,6 +21,9 @@ public class ClientHandler implements Runnable{
             for(;;) {
                 out.println("Enter Payroll Number:");
                 String input = in.readLine();
+                if (input.equalsIgnoreCase("exit")){
+                    break;
+                }
                 int payrollnumber = Integer.parseInt(input);
                 if (input.matches("\\d{6}")) {
                     out.println("Payroll number accepted.");
@@ -38,7 +41,7 @@ public class ClientHandler implements Runnable{
                 out.println(UsersPallet);
                 int gridassigner = sortGrid(UsersPallet,out);
                 ArrayList<int[]> chosengrid = warehousecages.get(gridassigner);
-                out.println("Grid Assigned: " + gridassigner);
+                out.println("Grid Assigned: " + (gridassigner + 1));
                 distributeProducts(UsersPallet,out);
                 picking(out,in,chosengrid,distributeProducts(UsersPallet,out), payrollnumber);}
                 if(palletsInWarehouse.isEmpty()){
