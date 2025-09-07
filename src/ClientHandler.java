@@ -38,12 +38,15 @@ public class ClientHandler implements Runnable{
                 displayAllPalletes(out);
                 int Pallet = Integer.parseInt(in.readLine());
                 LinkedHashMap <String, Integer> UsersPallet = pickPallet(Pallet,out, payrollnumber);
+                    if (UsersPallet == null){
+                        UsersPallet = checkPickPallet(UsersPallet, out, in, payrollnumber);
+                        out.println(UsersPallet);
+                        allMethods(UsersPallet, out, payrollnumber, in);
+                    } else {
                 out.println(UsersPallet);
-                int gridassigner = sortGrid(UsersPallet,out);
-                ArrayList<int[]> chosengrid = warehousecages.get(gridassigner);
-                out.println("Grid Assigned: " + (gridassigner + 1));
-                distributeProducts(UsersPallet,out);
-                picking(out,in,chosengrid,distributeProducts(UsersPallet,out), payrollnumber);}
+                allMethods(UsersPallet, out, payrollnumber, in);}
+
+                }
                 if(palletsInWarehouse.isEmpty()){
                     System.out.println("All Goods have Gone");
                     out.println("Well Done all the goods have gone!");
@@ -56,6 +59,13 @@ public class ClientHandler implements Runnable{
 
 
     }
+    private void allMethods(LinkedHashMap <String, Integer> UsersPallet, PrintWriter out, int payrollnumber, BufferedReader in) throws IOException {
+        int gridassigner = sortGrid(UsersPallet,out);
+        ArrayList<int[]> chosengrid = warehousecages.get(gridassigner);
+        out.println("Grid Assigned: " + (gridassigner + 1));
+        distributeProducts(UsersPallet,out);
+        picking(out,in,chosengrid,distributeProducts(UsersPallet,out), payrollnumber);}
+
     private static List<LinkedHashMap<String, Integer>> generatePallets(){
         ArrayList<String> Goods = GenerateGoodsIn();
         List<LinkedHashMap<String, Integer>> pallet = new ArrayList<>();
@@ -69,6 +79,7 @@ public class ClientHandler implements Runnable{
         return pallet;
 
     }
+
 
     private static ArrayList<String> GenerateGoodsIn(){
         ArrayList<String> food = new ArrayList<>();
@@ -137,6 +148,22 @@ public class ClientHandler implements Runnable{
 
             }}
         return cagesinwarehouse;
+    }
+    private LinkedHashMap<String, Integer> checkPickPallet(LinkedHashMap<String, Integer> UserPallet, PrintWriter out,BufferedReader in, int payrollnumber) throws IOException {
+        while (UserPallet == null){
+            displayAllPalletes(out);
+            int index = Integer.parseInt(in.readLine());
+            if(index < 0 || index >= palletsInWarehouse.size()){
+                out.println("Pallet invalid, try again.");
+                continue;
+            }
+            UserPallet = new LinkedHashMap<String, Integer>();
+            UserPallet.putAll(palletsInWarehouse.get(index));
+            palletsInWarehouse.remove(index);
+            System.out.println(payrollnumber + " Has chosen a pallet " + UserPallet);
+            System.out.println("There are " + palletsInWarehouse.size() + " pallets left");
+        }
+        return UserPallet;
     }
 
     public ArrayList<Integer> chooseStores(){
