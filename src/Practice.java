@@ -32,21 +32,24 @@ public class Practice {
     }
     List<LinkedHashMap<String,Integer>> palletsInWarehouse = generatePallets();
     public LinkedHashMap<String,Integer> pickPallet(int index){
-        LinkedHashMap<String, Integer> singlepallet = new LinkedHashMap<>();
-        System.out.println("Pick a Pallet");
-        if(index >= palletsInWarehouse.size()){
-            System.out.println("Pallet invalid");
-            return null;
-        }
-        singlepallet.putAll(palletsInWarehouse.get(index));
-        palletsInWarehouse.remove(index);
+        synchronized (palletsInWarehouse) {
+            LinkedHashMap<String, Integer> singlepallet = new LinkedHashMap<>();
+            System.out.println("Pick a Pallet");
+            if (index >= palletsInWarehouse.size()) {
+                System.out.println("Pallet invalid");
+            }
+            singlepallet.putAll(palletsInWarehouse.get(index));
+            palletsInWarehouse.remove(index);
 
-        return singlepallet;
-    }
+            return singlepallet;
+
+        }
+        }
     private void displayAllPalletes(){
+        synchronized (palletsInWarehouse){
         for (int num = 0; num < palletsInWarehouse.size(); num++) {
             System.out.println(num + " : " + palletsInWarehouse.get(num));
-        }
+        }}
     }
 
 
@@ -123,6 +126,8 @@ public class Practice {
 
 
     }
+
+
 
 
 
